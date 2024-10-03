@@ -24,4 +24,4 @@ if __name__ == "__main__":
 
 ## About
 
-In sixth form I was recommended a book by my computer science teacher Mr Coppen to learn Object Orientated Programming before starting the A level coursework. I worked on it substantially, it taught me a lot about OOP, but I never finished it. The book was Building Skills in Object-Oriented Design by Steven F. Lott. In this git repo I'd like to finish and fix the program I'd like to fix the program and maybe mess around with it a bit.
+In sixth form I was recommended a book by my computer science teacher Mr Coppen to learn Object Orientated Programming before starting the A level coursework. I worked on it substantially, it taught me a lot about OOP, but I never finished it. The book was Building Skills in Object-Oriented Design by Steven F. Lott. In this git repo I'd like to finish and fix the program and maybe mess around with it a bit.
