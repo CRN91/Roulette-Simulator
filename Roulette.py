@@ -234,6 +234,9 @@ class Table:
       self.bets.append(bet)
       # raise InvalidBet
 
+    def clearBets(self):
+        self.bets = []
+
     def __iter__(self):
       return iter(self.bets)
 
@@ -255,22 +258,22 @@ class Game:
         self.table = table
 
     def cycle(self, player):
-
+        before = player.stake
+        self.table.clearBets()
         player.placeBets()
+        after = player.stake
         winningBin = self.wheel.next()
-        self.outcomes = list(winningBin)
+        winningOutcomes = list(winningBin)
 
         winCheck = False
         iterator = self.table.__iter__()
         for i in iterator:
-          for winOutcome in self.outcomes:
-            if i.outcome.__eq__(winOutcome) == True:
-              player.win(i)
-              winCheck = True
-        if not(winCheck):
+          if i.outcome in winningOutcomes:
+            player.win(i)
+          else:
+            # If the player has less than 10 left end the game
             if player.lose():
                 player.stopPlaying()
-
 
 class Player:
 
@@ -351,7 +354,7 @@ class SevenReds(Martingale):
 class PlayerRandom(Player):
 
     def __init__(self, table, wheel):
-        super().__init__(self, table, wheel)
+        super().__init__(table, wheel)
         self.rng = random.random
         self.bins = self.table.wheel.bins
 
@@ -415,7 +418,7 @@ class Player1326ThreeWins(Player1326State):
 class Player1326(Player):
 
     def __init__(self, table, wheel):
-        super().__init__(self, table, wheel)
+        super().__init__(table, wheel)
         # self.state =
         # self.outcome = self.table.wheel.outcomes
 
@@ -503,7 +506,7 @@ class Simulator:
         self.samples = 50
         self.bettingUnits = 100
         self.initDuration = 250
-        # self.initStake = self.bettingUnits * table.minimum
+        #self.initStake = self.bettingUnits * table.minimum
         self.durations = []
         self.maxima = []
 
@@ -515,22 +518,26 @@ class Simulator:
 
     def session(self):
         stakeValues = []
-        print("ok dokee here we go")
         while self.player.playing():
-            print("a while loop here")
+            self.game.table.clearBets()
             self.game.cycle(self.player)
             stakeValues.append(self.player.stake)
+            print(stakeValues)
         return stakeValues
 
     def gather(self):
         for i in range(self.samples):
             print(i,'doing this sample')
+            # I need to reset the game here
             sessionList = self.session()
             print('session complete')
+            print(sessionList)
             self.maxima.append(max(sessionList))
             self.durations.append(len(sessionList))
             print("list finished, for loop single loop")
         print("for loop done")
+        print(self.maxima,"maxima")
+        print(self.durations,"durations")
 
 
 class IntegerStatistics(list):
@@ -547,11 +554,14 @@ class IntegerStatistics(list):
         mean = self.mean()
         return ((sum((x - mean) ** 2 for x in self) / (self.length - 1)) ** 1 / 2)
 
-builder = BinBuilder()
-theWheel = Wheel()
-builder.buildBins(theWheel)
-theTable = Table()
-theGame = Game(theWheel,theTable)
-thePlayer = Passenger57(theTable,theWheel)
-sim = Simulator(theGame, thePlayer)
-sim.gather()
+if __name__ == "__main__":
+    builder = BinBuilder()
+    theWheel = Wheel()
+    builder.buildBins(theWheel)
+    theTable = Table()
+    theGame = Game(theWheel,theTable)
+    thePlayer = Passenger57(theTable,theWheel)
+    #thePlayer = Player1326(theTable,theWheel)
+    sim = Simulator(theGame, thePlayer)
+    #print(thePlayer)
+    sim.gather()
