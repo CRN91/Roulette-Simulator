@@ -1,6 +1,6 @@
 # Roulette Simulator
 
-<img src="rmimg/Personal.svg"> <img src="rmimg/Solo.svg">
+<img src="rmimg/Personal.svg" height="28"> <img src="rmimg/Solo.svg" height="28">
 
 A program that simulates many instances of a game of roulette and various betting strategies on it and compiles the results to measure the effectiveness of each betting strategy. A seemingly counter-intuitive endevour, but here it is.
 
